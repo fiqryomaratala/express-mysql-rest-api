@@ -11,9 +11,11 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: 123456
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - backend
 
   adminer:
     image: adminer
@@ -21,7 +23,11 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    
+    depends_on:
+      - db
+    networks:
+      - backend
+
   node:
     build: .
     container_name: node_container
@@ -32,10 +38,13 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-    - db
+      - db
+    networks:
+      - backend
 
 volumes:
   mysql_data:
 
-  
-
+networks:
+  backend:
+    driver: bridge

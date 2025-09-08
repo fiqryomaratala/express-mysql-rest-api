@@ -2,19 +2,23 @@
   "name": "api_express_mysql",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  
+  "main": "src/server.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "joi": "^18.0.1",
+    "morgan": "^1.10.1",
     "mysql2": "^3.14.4"
   },
   "devDependencies": {
