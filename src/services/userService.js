@@ -50,10 +50,7 @@ export async function updateUser(id, data) {
   if (!fields.length) return await getUserById(id);
 
   values.push(id);
-  await db.query(
-    `UPDATE users SET ${fields.join(", ")}, updated_at = NOW() WHERE id = ?`,
-    values
-  );
+  await db.query(`UPDATE users SET ${fields.join(", ")}, updated_at = NOW() WHERE id = ?`, values);
   return await getUserById(id);
 }
 

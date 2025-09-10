@@ -43,10 +43,11 @@ export async function updateProduct(id, data) {
     return await getProductById(id);
 }
 
-export function deleteProduct(id) {
-    const [res] = db.query('DELETE FROM products WHERE id = ?', [id]);
-    return res.affectedRows > 0;
+export async function deleteProduct(id) {
+  const [res] = await db.query("DELETE FROM products WHERE id = ?", [id]);
+  return res.affectedRows > 0;
 }
+
 
 
 
