@@ -19,7 +19,7 @@ app.get("/", (req, res) => res.send("API Express with MySQL is running..."));
 app.use("/api/users", userRoutes);
 
 // Route product
-app.use("/products", productRoutes);
+app.use("/api/products", productRoutes);
 
 // Centralized error handler (last)
 app.use(errorHandler);
