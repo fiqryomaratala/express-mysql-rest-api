@@ -1,9 +1,30 @@
 import db from '../db.js';
 
-// Ambil semua product
-export async function getProducts() {
-    const [rows] = await db.query('SELECT * FROM products');
-    return rows;
+// Ambil semua product dengan pagination & sorting
+export async function getProducts({ page = 1, limit = 10, sort = "id", order = "asc" }) {
+    const offset = (page - 1) * limit;
+   
+// Validasi input agar tidak terjadi SQL injection
+    const validSort = ["id", "name", "price", "created_at"];
+    const validOrder = ["asc", "desc"];
+
+    if (!validSort.includes(sort)) sort  = "id";
+    if (!validOrder.includes(order.toLocaleLowerCase())) order = "asc";
+
+    const [rows] = await db.query(`SELECT * FROM products ORDER BY ${sort} ${order.toLocaleUpperCase()} LIMIT ? OFFSET ?`, 
+    [Number(limit), Number(offset)]);
+
+    const [[{ total }]] = await db.query("SELECT COUNT(*) as total FROM products");
+
+    return {
+        data: rows,
+        pagination: {
+            total,
+            page: Number(page),
+            limit: Number(limit),
+            pages: Math.ceil(total / limit)
+        },
+    };
 }
 
 export async function getProductById(id) {

@@ -1,13 +1,13 @@
 import { asyncHandler } from "../middlewares/asyncHandler.js";
 import ApiError from "../utils/apiError.js";
 import { getProducts, getProductById, createProduct, updateProduct, deleteProduct } from "../services/productService.js"; 
-import { createOneProductSchema, updateProductSchema } from "../validations/product.schema.js";    
+
 
 export const listProducts = asyncHandler(async (req, res) => {
-    const products = await getProducts();
+    const { page, limit, sort, order } = req.query;
+    const products = await getProducts({ page, limit, sort, order });
     res.json(products);
 });
-
 
 export const getOneProduct = asyncHandler(async (req, res) => {
     const product = await getProductById(req.params.id);
@@ -16,18 +16,12 @@ export const getOneProduct = asyncHandler(async (req, res) => {
 });
 
 export const createOneProduct = asyncHandler(async (req, res,) => {
-    const { error, value } = createOneProductSchema.validate(req.body, { convert: false });
-    if (error) throw new ApiError(400, error.message);
-
-    const product = await createProduct(value);
+    const product = await createProduct(req.validateBody);
     res.status(201).json(product); 
 })
 
 export const updateOneProduct = asyncHandler(async (req, res) => {
-    const { error, value } = updateProductSchema.validate(req.body, { convert: false });
-    if (error) throw new ApiError(400, error.message);
-
-    const product = await updateProduct(req.params.id, value);
+    const product = await updateProduct(req.params.id, req.validateBody);
     if (!product) throw new ApiError(404, "Product not found");
     res.json(product);
 });

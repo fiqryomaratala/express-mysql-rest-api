@@ -16,16 +16,12 @@ export const getOneUser = asyncHandler(async (req, res) =>{
 });
 
 export const createOneUser = asyncHandler(async(req, res) =>  {
-    const {error, value} = createUserSchema.validate(req.body, { convert: false});
-    if (error) throw new ApiError(400, error.message);
-    const user = await createUser(value);
+    const user = await createUser(req.validateBody);
     res.status(201).json(user);
 });
 
 export const updateOneUser = asyncHandler(async(req, res) => {
-    const {error, value} = createUserSchema.validate(req.body, { convert: false});
-    if (error) throw new ApiError(400, error.message);
-    const user = await updateUser(req.params.id, value);
+    const user = await updateUser(req.params.id, req.validateBody);
     if (!user) throw new ApiError(404, "User not found");
     res.json(user);
 });
