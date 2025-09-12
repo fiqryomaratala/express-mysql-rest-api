@@ -6,10 +6,10 @@ services:
     container_name: mysql_container
     restart: always
     environment: 
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: api_express
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
@@ -32,6 +32,8 @@ services:
     build: .
     container_name: node_container
     command: npm start
+    environment:
+      NODE_ENV: ${NODE_ENV}
     volumes:
       - .:/app
       - /app/node_modules
