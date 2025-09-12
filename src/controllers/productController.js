@@ -4,7 +4,7 @@ import { getProducts, getProductById, createProduct, updateProduct, deleteProduc
 
 
 export const listProducts = asyncHandler(async (req, res) => {
-    const { page, limit, sort, order } = req.query;
+    const { page, limit, sort, order, search } = req.query;
     const products = await getProducts({ page, limit, sort, order, search });
     res.json(products);
 });

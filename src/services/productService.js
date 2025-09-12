@@ -1,7 +1,7 @@
 import db from '../db.js';
 
 // Ambil semua product dengan pagination & sorting
-export async function getProducts({ page = 1, limit = 10, sort = "id", order = "asc", searc ="" }) {
+export async function getProducts({ page = 1, limit = 10, sort = "id", order = "asc", search ="" }) {
     const offset = (page - 1) * limit;
    
 // Validasi input agar tidak terjadi SQL injection
@@ -12,27 +12,30 @@ export async function getProducts({ page = 1, limit = 10, sort = "id", order = "
     if (!validOrder.includes(order.toLocaleLowerCase())) order = "asc";
 
 // Base query
-    let query = "SELECT * FROM products";
-    let countSql = `SELECT COUNT(*) as total FROM products`;
-    const params = [];
 
-// Tambahkan filter pencarian 
+    let query = `SELECT * FROM products`;
+    let countQuery = `SELECT COUNT(*) as total FROM products`;
+    let params = [];
+    let countParams = [];
+
+
+// Jika ada search, tambahkan filter WHERE 
     if (search) {
-        sql += "WHERE name LIKE ? OR description LIKE ?";
-        countSql += " WHERE name LIKE ? OR description LIKE ?";
+        query += ` WHERE name LIKE ? OR description LIKE ?`;
+        countQuery += ` WHERE name LIKE ? OR description LIKE ?`;
         params.push(`%${search}%`, `%${search}%`);
-    }
+        countParams.push(`%${search}%`, `%${search}%`);
+    }    
 
-// Sorting dan Pagination
-    sql += ` ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`;
+
+// Order BY + LIMIT
+    query += ` ORDER BY ${sort} ${order.toUpperCase()} LIMIT ? OFFSET ?`;
     params.push(Number(limit), Number(offset));
 
-    const [rows] = await db.query(sql, params);
+    const [rows] = await db.query(query, params);
+    const [[{ total }]] = await db.query(countQuery, countParams);
 
-// Hitung total data untuk pagination
-    const [countRows] = await db.query(countSql, search ? [`%${seaech}%`, `%${search}%`] : []);
-    const total = countRows[0].total;
-
+    
     return {
         data: rows,
         pagination: {
