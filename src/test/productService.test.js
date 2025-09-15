@@ -1,4 +1,4 @@
-import { createProduct, getProductById, deeleteProductById, deleteProduct } from '../services/productService.js';
+import { createProduct, getProductById, deleteProduct } from '../services/productService.js';
 import db from '../db.js';
 
 describe('Product Service', () => {
@@ -22,7 +22,7 @@ describe('Product Service', () => {
     test("getProducrById() harus bisa mengambil product berdasarkan id", async () => {
         const product = await getProductById(productId);
         expect(product).not.toBeNull();
-        expect(product.name).tobe("Test Product");
+        expect(product.name).toBe("Test Product");
     });
 
     test("deleteProduct() harus bisa menghapus produk", async () => {

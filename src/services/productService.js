@@ -1,4 +1,7 @@
 import db from '../db.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Ambil semua product dengan pagination & sorting
 export async function getProducts({ page = 1, limit = 10, sort = "id", order = "asc", search ="" }) {

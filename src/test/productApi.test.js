@@ -1,4 +1,4 @@
-import { request } from "supertest";
+import request from "supertest";
 import app from "../app.js";
 import db from "../db.js";
 
@@ -12,10 +12,12 @@ describe("Product API", () => {
     test("POST /products harus bisa tambah product", async () => {
         const res = await request(app)
             .post("/api/products")
-            .send({ name: "Api t", price: 2000, description: "Product Via Api" });
+            .send({ name: "Api Test", price: 2000, description: "Product Via Api" });
             
+        console.log("POST /products response:", res.body);
         expect(res.statusCode).toBe(201);
-        expect(res.body.name).toBe("Api t");
+        productId = res.body.id;
+        expect(res.body.name).toBe("Api Test");
     });
 
     test("GET /products/:id harus ambil detail product", async () => {

@@ -44,6 +44,20 @@ services:
     networks:
       - backend
 
+  test:
+    build: .
+    container_name: node_test_container
+    command: npm test
+    environment:
+      NODE_ENV: test
+    volumes:
+        - .:/app
+        - /app/node_modules
+    depends_on:
+        - db
+    networks:
+        - backend
+
 volumes:
   mysql_data:
 
